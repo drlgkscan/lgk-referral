@@ -2,8 +2,8 @@
 // LGK Scan Referral — client-side logic
 // ============================================================
 
-// >>> REPLACE WITH YOUR DEPLOYED APPS SCRIPT WEB APP URL <<<
-const API_URL = "https://script.google.com/macros/s/XXXXXXXXXXXXXXXXXXXX/exec";
+// Your deployed Apps Script Web App URL
+const API_URL = "https://script.google.com/macros/s/AKfycbx_8guVY3ZfgGQ6MyLcNB27xKFReICy9Uo9RUNDjZZqe1km6z5Zis5h6IwrN6XWwZ9N/exec";
 
 // Clinic info (used in patient WhatsApp message & PDF)
 const CLINIC = {
@@ -68,7 +68,6 @@ const STORE = {
 };
 
 const DEVICE_KEY = "lgk_referral_device";
-// Shape: { device_token, doctor_id, doctor_name, doctor_qualification, doctor_reg_no, doctor_clinic, doctor_address, doctor_phone, bound_at }
 
 // ============================================================
 // UI helpers
@@ -97,7 +96,6 @@ async function api(action, payload) {
   const body = JSON.stringify({ action, ...payload });
   const resp = await fetch(API_URL, {
     method: 'POST',
-    // text/plain avoids CORS preflight — Apps Script reads e.postData.contents
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body
   });
@@ -145,14 +143,12 @@ document.getElementById('btn-verify-otp').addEventListener('click', async () => 
   }
   loading(true, 'Verifying…');
   try {
-    // Generate a stable-ish device id for this browser
     let deviceId = STORE.get('lgk_device_id');
     if (!deviceId) {
       deviceId = 'dev_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
       STORE.set('lgk_device_id', deviceId);
     }
     const data = await api('verify_otp', { phone, otp, device_id: deviceId });
-    // data contains: device_token, doctor { id, name, qualification, reg_no, clinic, address, phone }
     const device = {
       device_token: data.device_token,
       doctor_id: data.doctor.id,
@@ -221,7 +217,6 @@ document.getElementById('btn-generate').addEventListener('click', async () => {
   const ctx = { dev, patientName, patientPhone, scanKey, scan, history, refNo, dateStr };
   lastContext = ctx;
 
-  // 1. Generate PDF
   loading(true, 'Generating referral PDF…');
   try {
     lastPdfDataUrl = buildPdf(ctx);
@@ -231,7 +226,6 @@ document.getElementById('btn-generate').addEventListener('click', async () => {
     return;
   }
 
-  // 2. Log on backend + alert Satish (do not block UX if this fails)
   try {
     await api('submit_referral', {
       device_token: dev.device_token,
@@ -243,22 +237,18 @@ document.getElementById('btn-generate').addEventListener('click', async () => {
       ref_no: refNo
     });
   } catch (e) {
-    // Log failure is not fatal — doctor can still send PDF via WhatsApp
     console.warn('Backend log failed:', e.message);
     toast('Referral created (offline log failed)', 'error');
   }
 
   loading(false);
 
-  // 3. Download PDF for doctor (so they have a copy)
   triggerPdfDownload(lastPdfDataUrl, `Referral_${refNo}.pdf`);
 
-  // 4. Open WhatsApp with patient message
   const waMsg = buildPatientMessage(ctx);
   const waUrl = `https://wa.me/91${patientPhone}?text=${encodeURIComponent(waMsg)}`;
   window.open(waUrl, '_blank');
 
-  // 5. Show success screen
   document.getElementById('success-message').textContent =
     `Referral ${refNo} sent. PDF downloaded. WhatsApp opened for ${patientName}.`;
   show('success-screen');
@@ -331,7 +321,6 @@ function buildPdf(ctx) {
   const page_w = 210;
   const margin = 18;
 
-  // === Doctor letterhead (top band) ===
   doc.setFillColor(...TEAL);
   doc.rect(0, 0, page_w, 28, 'F');
   doc.setTextColor(255,255,255);
@@ -342,13 +331,11 @@ function buildPdf(ctx) {
   doc.text(line2, margin, 19);
   if (ctx.dev.doctor_clinic) doc.text(ctx.dev.doctor_clinic, margin, 24);
 
-  // Right: phone
   if (ctx.dev.doctor_phone) {
     doc.setFontSize(10);
     doc.text('Ph: ' + ctx.dev.doctor_phone, page_w - margin, 19, { align: 'right' });
   }
 
-  // === Title bar ===
   let y = 40;
   doc.setDrawColor(...TEAL); doc.setLineWidth(0.6);
   doc.line(margin, y, page_w - margin, y);
@@ -358,13 +345,11 @@ function buildPdf(ctx) {
   y += 3;
   doc.line(margin, y, page_w - margin, y);
 
-  // Ref / Date
   y += 8;
   doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(...GREY);
   doc.text('Ref No: ' + ctx.refNo, margin, y);
   doc.text('Date: ' + ctx.dateStr, page_w - margin, y, { align: 'right' });
 
-  // === Refer To ===
   y += 10;
   doc.setFillColor(232, 244, 240);
   doc.roundedRect(margin, y, page_w - 2*margin, 22, 2, 2, 'F');
@@ -376,7 +361,6 @@ function buildPdf(ctx) {
   doc.text(`${CLINIC.name}, ${CLINIC.address} · Ph: ${CLINIC.phone}`, margin + 4, y + 18);
   y += 30;
 
-  // === Patient details ===
   doc.setTextColor(...TEAL); doc.setFont('helvetica','bold'); doc.setFontSize(11);
   doc.text('PATIENT DETAILS', margin, y);
   y += 2; doc.setDrawColor(...TEAL); doc.line(margin, y, page_w - margin, y);
@@ -391,7 +375,6 @@ function buildPdf(ctx) {
   doc.setFont('helvetica','normal'); doc.text('+91 ' + ctx.patientPhone, margin + 24, y);
   y += 12;
 
-  // === Scan requested ===
   doc.setTextColor(...TEAL); doc.setFont('helvetica','bold'); doc.setFontSize(11);
   doc.text('SCAN REQUESTED', margin, y);
   y += 2; doc.line(margin, y, page_w - margin, y);
@@ -400,7 +383,6 @@ function buildPdf(ctx) {
   doc.text('• ' + ctx.scan.label, margin, y);
   y += 10;
 
-  // === Clinical history ===
   doc.setTextColor(...TEAL); doc.setFont('helvetica','bold'); doc.setFontSize(11);
   doc.text('CLINICAL HISTORY / INDICATION', margin, y);
   y += 2; doc.line(margin, y, page_w - margin, y);
@@ -412,7 +394,6 @@ function buildPdf(ctx) {
   doc.text(wrapped, margin, y);
   y += wrapped.length * 5 + 5;
 
-  // === Preparation (for patient) ===
   if (y > 230) { doc.addPage(); y = 20; }
   doc.setFillColor(254, 252, 232);
   doc.roundedRect(margin, y, page_w - 2*margin, 18, 2, 2, 'F');
@@ -423,7 +404,6 @@ function buildPdf(ctx) {
   doc.text(prepWrapped, margin + 4, y + 12);
   y += 25;
 
-  // === Signature block ===
   if (y < 240) y = 240;
   doc.setDrawColor(180, 180, 180); doc.setLineWidth(0.3);
   doc.line(page_w - margin - 60, y, page_w - margin, y);
@@ -436,7 +416,6 @@ function buildPdf(ctx) {
     doc.text(ctx.dev.doctor_reg_no, page_w - margin - 30, y + 15, { align: 'center' });
   }
 
-  // === Footer ===
   doc.setDrawColor(...TEAL); doc.setLineWidth(0.4);
   doc.line(margin, 282, page_w - margin, 282);
   doc.setFontSize(8); doc.setTextColor(...GREY); doc.setFont('helvetica','normal');
