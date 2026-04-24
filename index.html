@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#1A7A5E" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="LGK Referral" />
+<link rel="manifest" href="manifest.json" />
+<link rel="stylesheet" href="style.css" />
+<title>LGK Scan Referral</title>
+</head>
+<body>
+
+<!-- Header -->
+<header id="app-header">
+  <div class="header-title">LGK Scan Referral</div>
+  <div class="header-sub" id="header-sub">Secure doctor referral system</div>
+</header>
+
+<!-- Loading overlay -->
+<div id="loading" class="overlay hidden">
+  <div class="spinner"></div>
+  <div id="loading-msg">Please wait…</div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast hidden"></div>
+
+<!-- SCREEN 1: Setup / OTP -->
+<section id="setup-screen" class="screen hidden">
+  <div class="card">
+    <h2>Doctor Setup</h2>
+    <p class="muted">Enter your Telegram-registered phone number to receive a one-time code.</p>
+
+    <label for="setup-phone">Your Phone Number</label>
+    <input type="tel" id="setup-phone" inputmode="tel" placeholder="10-digit number" maxlength="10" autocomplete="tel-national" />
+
+    <button id="btn-send-otp" class="btn-primary">Send OTP via Telegram</button>
+
+    <div id="otp-block" class="hidden">
+      <label for="setup-otp">Enter 6-digit OTP</label>
+      <input type="text" id="setup-otp" inputmode="numeric" placeholder="______" maxlength="6" autocomplete="one-time-code" />
+      <button id="btn-verify-otp" class="btn-primary">Verify &amp; Bind This Device</button>
+      <p class="muted small">OTP valid for 5 minutes. Check your Telegram.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SCREEN 2: Main referral form -->
+<section id="main-screen" class="screen hidden">
+  <div class="card">
+    <div class="doctor-strip">
+      <div>
+        <div class="doctor-name" id="doctor-name-display">—</div>
+        <div class="muted small" id="doctor-reg-display">—</div>
+      </div>
+      <button id="btn-logout" class="btn-ghost" title="Sign out">⎋</button>
+    </div>
+
+    <label for="patient-name">Patient Name</label>
+    <input type="text" id="patient-name" placeholder="Tap mic on keyboard 🎤" autocomplete="off" />
+
+    <label for="patient-phone">Patient Phone</label>
+    <input type="tel" id="patient-phone" inputmode="tel" placeholder="10-digit number" maxlength="10" autocomplete="off" />
+
+    <label for="scan-type">Scan Requested</label>
+    <select id="scan-type">
+      <option value="">— Select scan —</option>
+      <optgroup label="Obstetric / Gynaecology">
+        <option value="EP">Early Pregnancy (EP)</option>
+        <option value="NT">NT Scan (11–14 weeks)</option>
+        <option value="GROWTH">Growth Scan</option>
+        <option value="GROWTH_DOPPLER">Growth + Doppler</option>
+        <option value="ANOMALY">Anomaly Scan</option>
+        <option value="FETAL_ECHO">Fetal Echo</option>
+        <option value="ANOMALY_ECHO">Anomaly + Fetal Echo</option>
+        <option value="FETAL_NEURO">Fetal Neurosonogram</option>
+        <option value="FOLLICULAR">Follicular Study</option>
+      </optgroup>
+      <optgroup label="General">
+        <option value="ABDOMEN">Abdomen</option>
+        <option value="PELVIS">Pelvis</option>
+        <option value="AP">Abdomen + Pelvis</option>
+        <option value="KUB">KUB</option>
+        <option value="THYROID">Neck / Thyroid</option>
+        <option value="BREAST1">Breast (unilateral)</option>
+        <option value="BREAST2">Breast (bilateral)</option>
+        <option value="MSK">Musculoskeletal (MSK)</option>
+        <option value="SCROTUM">Scrotum</option>
+        <option value="EYE">Eye / Orbit</option>
+        <option value="CHEST">Chest</option>
+      </optgroup>
+      <optgroup label="Doppler">
+        <option value="ADS">Arterial Doppler — Single limb</option>
+        <option value="VDS">Venous Doppler — Single limb</option>
+        <option value="ADB">Arterial Doppler — Both limbs</option>
+        <option value="VDB">Venous Doppler — Both limbs</option>
+        <option value="AVS">Arterio-Venous — Single limb</option>
+        <option value="ADA">Arterial Doppler — All limbs</option>
+        <option value="AVB">Arterio-Venous — Both limbs</option>
+        <option value="CVD">Carotid / Vertebral Doppler</option>
+        <option value="RAD">Renal Artery Doppler</option>
+        <option value="PVD">Portal Venous Doppler</option>
+        <option value="PENILE">Penile Doppler</option>
+      </optgroup>
+    </select>
+
+    <label for="history">Clinical History / Indication</label>
+    <textarea id="history" rows="4" placeholder="Tap mic 🎤 and speak freely — e.g. G3P2, 32 weeks, mild GDM on metformin, previous LSCS"></textarea>
+
+    <button id="btn-generate" class="btn-primary">Generate Referral &amp; Send via WhatsApp</button>
+    <button id="btn-reset-form" class="btn-ghost">Clear form</button>
+  </div>
+</section>
+
+<!-- SCREEN 3: Success -->
+<section id="success-screen" class="screen hidden">
+  <div class="card success-card">
+    <div class="success-icon">✓</div>
+    <h2>Referral Generated</h2>
+    <p class="muted" id="success-message">Opening WhatsApp to send to patient…</p>
+    <button id="btn-new-referral" class="btn-primary">New Referral</button>
+    <button id="btn-redownload-pdf" class="btn-ghost">Download PDF again</button>
+  </div>
+</section>
+
+<footer id="app-footer">
+  <small>Dr. L.G. Krishna Ultrasound Clinic, Sirsi · 7204764969</small>
+</footer>
+
+<!-- Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  }
+</script>
+
+</body>
+</html>
