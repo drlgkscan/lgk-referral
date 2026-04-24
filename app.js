@@ -15,44 +15,54 @@ const CLINIC = {
   phone: "7204764969",
   email: "drlgkscan@gmail.com",
   mapUrl: "https://maps.app.goo.gl/AgdDpqE4xxgwSymm6",
-  bookingUrl: "https://drlgkscan.github.io/lgk-booking/",
-  timings: "Mon–Sat: 9:00 AM – 1:30 PM, 4:30 PM – 7:30 PM · Sun closed",
-  advanceBooking: "Advance token booking available via the booking link below."
+  bookingUrl: "https://drlgkscan.github.io/lgk-booking/booking.html",
+  timings: "Mon–Sat: 9:30 AM – 5:30 PM",
+  timingsNote: "Other timings available on request — please call 7204764969 in advance.",
+  emergencyNote: "Emergency scans: call 7204764969 anytime, we will accommodate.",
+  advanceBooking: "To guarantee your slot, you can book an advance token via the link below (small booking fee applies)."
 };
 
 // Scan type definitions: label + prep instructions
+// Prep text is warm, patient-friendly — patients are often anxious
+const PREG_PREP = "No preparation needed. You can eat normally and come calmly — nothing to worry about.";
+const FAST_PREP = "Empty stomach for 3 hours is enough. Plain water is allowed.";
+const BLADDER_PREP = "Full bladder needed — drink 4–5 glasses of water 1 hour before and do not urinate until the scan.";
+const NT_PREP = "Full bladder preferred — 3–4 glasses of water 1 hour before. Food is fine, come calmly.";
+const NOPREP = "No preparation needed.";
+const AP_PREP = "3 hours empty stomach AND full bladder at time of scan.";
+
 const SCAN_DB = {
-  EP:             { label: "Early Pregnancy Scan",         prep: "No preparation needed" },
-  NT:             { label: "NT Scan (11–14 weeks)",        prep: "Full bladder preferred — drink 3–4 glasses of water 1 hour before" },
-  GROWTH:         { label: "Growth Scan",                  prep: "No preparation needed" },
-  GROWTH_DOPPLER: { label: "Growth Scan + Doppler",        prep: "No preparation needed" },
-  ANOMALY:        { label: "Anomaly Scan",                 prep: "No preparation needed. Allow 45 minutes for the scan" },
-  FETAL_ECHO:     { label: "Fetal Echo",                   prep: "No preparation needed" },
-  ANOMALY_ECHO:   { label: "Anomaly + Fetal Echo",         prep: "No preparation needed. Allow 60 minutes" },
-  FETAL_NEURO:    { label: "Fetal Neurosonogram",          prep: "No preparation needed" },
-  FOLLICULAR:     { label: "Follicular Study",             prep: "Full bladder — drink 3–4 glasses of water 1 hour before" },
-  ABDOMEN:        { label: "Abdomen Ultrasound",           prep: "6 hours fasting. Plain water is allowed" },
-  PELVIS:         { label: "Pelvis Ultrasound",            prep: "Full bladder — drink 4–5 glasses of water 1 hour before, do not urinate" },
-  AP:             { label: "Abdomen + Pelvis",             prep: "6 hours fasting AND full bladder at time of scan" },
-  KUB:            { label: "KUB (Kidney-Ureter-Bladder)",  prep: "Full bladder — drink 4–5 glasses of water 1 hour before" },
-  THYROID:        { label: "Neck / Thyroid Ultrasound",    prep: "No preparation needed" },
-  BREAST1:        { label: "Breast Ultrasound (unilateral)", prep: "No preparation needed" },
-  BREAST2:        { label: "Breast Ultrasound (bilateral)", prep: "No preparation needed" },
-  MSK:            { label: "Musculoskeletal Ultrasound",   prep: "No preparation needed" },
-  SCROTUM:        { label: "Scrotum Ultrasound",           prep: "No preparation needed" },
-  EYE:            { label: "Eye / Orbit Ultrasound",       prep: "No preparation needed" },
-  CHEST:          { label: "Chest Ultrasound",             prep: "No preparation needed" },
-  ADS:            { label: "Arterial Doppler — Single limb", prep: "No preparation needed" },
-  VDS:            { label: "Venous Doppler — Single limb", prep: "No preparation needed" },
-  ADB:            { label: "Arterial Doppler — Both limbs", prep: "No preparation needed" },
-  VDB:            { label: "Venous Doppler — Both limbs",  prep: "No preparation needed" },
-  AVS:            { label: "Arterio-Venous Doppler — Single limb", prep: "No preparation needed" },
-  ADA:            { label: "Arterial Doppler — All limbs", prep: "No preparation needed" },
-  AVB:            { label: "Arterio-Venous Doppler — Both limbs", prep: "No preparation needed" },
-  CVD:            { label: "Carotid / Vertebral Doppler",  prep: "No preparation needed" },
-  RAD:            { label: "Renal Artery Doppler",         prep: "6 hours fasting. Plain water is allowed" },
-  PVD:            { label: "Portal Venous Doppler",        prep: "6 hours fasting. Plain water is allowed" },
-  PENILE:         { label: "Penile Doppler",               prep: "No preparation needed" }
+  EP:             { label: "Early Pregnancy Scan",         prep: PREG_PREP },
+  NT:             { label: "NT Scan (11–14 weeks)",        prep: NT_PREP },
+  GROWTH:         { label: "Growth Scan",                  prep: PREG_PREP },
+  GROWTH_DOPPLER: { label: "Growth Scan + Doppler",        prep: PREG_PREP },
+  ANOMALY:        { label: "Anomaly Scan",                 prep: PREG_PREP + " Allow 45 minutes for the scan." },
+  FETAL_ECHO:     { label: "Fetal Echo",                   prep: PREG_PREP },
+  ANOMALY_ECHO:   { label: "Anomaly + Fetal Echo",         prep: PREG_PREP + " Allow 60 minutes." },
+  FETAL_NEURO:    { label: "Fetal Neurosonogram",          prep: PREG_PREP },
+  FOLLICULAR:     { label: "Follicular Study",             prep: BLADDER_PREP },
+  ABDOMEN:        { label: "Abdomen Ultrasound",           prep: FAST_PREP },
+  PELVIS:         { label: "Pelvis Ultrasound",            prep: BLADDER_PREP },
+  AP:             { label: "Abdomen + Pelvis",             prep: AP_PREP },
+  KUB:            { label: "KUB (Kidney-Ureter-Bladder)",  prep: BLADDER_PREP },
+  THYROID:        { label: "Neck / Thyroid Ultrasound",    prep: NOPREP },
+  BREAST1:        { label: "Breast Ultrasound (unilateral)", prep: NOPREP },
+  BREAST2:        { label: "Breast Ultrasound (bilateral)", prep: NOPREP },
+  MSK:            { label: "Musculoskeletal Ultrasound",   prep: NOPREP },
+  SCROTUM:        { label: "Scrotum Ultrasound",           prep: NOPREP },
+  EYE:            { label: "Eye / Orbit Ultrasound",       prep: NOPREP },
+  CHEST:          { label: "Chest Ultrasound",             prep: NOPREP },
+  ADS:            { label: "Arterial Doppler — Single limb", prep: NOPREP },
+  VDS:            { label: "Venous Doppler — Single limb", prep: NOPREP },
+  ADB:            { label: "Arterial Doppler — Both limbs", prep: NOPREP },
+  VDB:            { label: "Venous Doppler — Both limbs",  prep: NOPREP },
+  AVS:            { label: "Arterio-Venous Doppler — Single limb", prep: NOPREP },
+  ADA:            { label: "Arterial Doppler — All limbs", prep: NOPREP },
+  AVB:            { label: "Arterio-Venous Doppler — Both limbs", prep: NOPREP },
+  CVD:            { label: "Carotid / Vertebral Doppler",  prep: NOPREP },
+  RAD:            { label: "Renal Artery Doppler",         prep: FAST_PREP },
+  PVD:            { label: "Portal Venous Doppler",        prep: FAST_PREP },
+  PENILE:         { label: "Penile Doppler",               prep: NOPREP }
 };
 
 // ============================================================
@@ -226,31 +236,42 @@ document.getElementById('btn-generate').addEventListener('click', async () => {
     return;
   }
 
+  // Extract base64 portion only (drop "data:application/pdf;base64," prefix)
+  const pdfBase64 = lastPdfDataUrl.split(',')[1];
+
+  // Send to backend — uploads PDF to Drive, logs to Sheet, alerts Satish
+  loading(true, 'Uploading & notifying…');
+  let pdfShareUrl = null;
   try {
-    await api('submit_referral', {
+    const resp = await api('submit_referral', {
       device_token: dev.device_token,
       patient_name: patientName,
       patient_phone: patientPhone,
       scan_key: scanKey,
       scan_label: scan.label,
       history: history,
-      ref_no: refNo
+      ref_no: refNo,
+      pdf_base64: pdfBase64
     });
+    pdfShareUrl = resp.pdf_url || null;
   } catch (e) {
-    console.warn('Backend log failed:', e.message);
-    toast('Referral created (offline log failed)', 'error');
+    console.warn('Backend submit failed:', e.message);
+    toast('Upload failed — patient will receive text only', 'error');
   }
 
   loading(false);
 
+  // Doctor keeps a local copy
   triggerPdfDownload(lastPdfDataUrl, `Referral_${refNo}.pdf`);
 
-  const waMsg = buildPatientMessage(ctx);
+  // Build WhatsApp message — with PDF link if upload succeeded
+  const waMsg = buildPatientMessage(ctx, pdfShareUrl);
   const waUrl = `https://wa.me/91${patientPhone}?text=${encodeURIComponent(waMsg)}`;
   window.open(waUrl, '_blank');
 
   document.getElementById('success-message').textContent =
-    `Referral ${refNo} sent. PDF downloaded. WhatsApp opened for ${patientName}.`;
+    `Referral ${refNo} sent. PDF downloaded. WhatsApp opened for ${patientName}.` +
+    (pdfShareUrl ? '' : ' (Note: PDF link unavailable — send PDF manually.)');
   show('success-screen');
 });
 
@@ -279,28 +300,32 @@ function formatDate(d) {
   return `${String(d.getDate()).padStart(2,'0')} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-function buildPatientMessage(ctx) {
+function buildPatientMessage(ctx, pdfUrl) {
   const { patientName, scan, dev, refNo } = ctx;
+  const refName = /^dr\.?\s/i.test(dev.doctor_name) ? dev.doctor_name : ('Dr. ' + dev.doctor_name);
+  const pdfLine = pdfUrl ? `\n📄 *Your referral slip:* ${pdfUrl}\n` : '';
   return `Namaskara ${patientName},
 
-Dr. ${dev.doctor_name} has referred you for *${scan.label}* at:
+${refName} has referred you for *${scan.label}* at:
 
 🏥 ${CLINIC.name}
 📍 ${CLINIC.address}
 📞 ${CLINIC.phone}
 
 🕐 *Timings:* ${CLINIC.timings}
+${CLINIC.timingsNote}
+
+🚨 ${CLINIC.emergencyNote}
 
 ⚠ *Preparation:* ${scan.prep}
 
 📌 *Please bring:*
-• This referral slip (PDF will be shared separately)
 • Aadhaar card
 • All previous scan reports / prescriptions
-
+${pdfLine}
 🗺 *Directions:* ${CLINIC.mapUrl}
 
-📅 *Book your token in advance:* ${CLINIC.bookingUrl}
+📅 *Advance Booking:* ${CLINIC.bookingUrl}
 ${CLINIC.advanceBooking}
 
 Ref: ${refNo}
@@ -309,34 +334,40 @@ Ref: ${refNo}
 }
 
 // ============================================================
-// PDF builder (jsPDF)
+// PDF builder (jsPDF) — LGK clinic is the header; referring doctor credited at bottom
 // ============================================================
 function buildPdf(ctx) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
 
   const TEAL = [26, 122, 94];
+  const TEAL_LIGHT = [232, 244, 240];
   const DARK = [40, 40, 40];
   const GREY = [110, 110, 110];
+  const LIGHTGREY = [180, 180, 180];
   const page_w = 210;
   const margin = 18;
 
+  // ───────────────────────────────────────────
+  // HEADER — LGK Clinic (teal band)
+  // ───────────────────────────────────────────
   doc.setFillColor(...TEAL);
-  doc.rect(0, 0, page_w, 28, 'F');
-  doc.setTextColor(255,255,255);
+  doc.rect(0, 0, page_w, 34, 'F');
+
+  doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica','bold'); doc.setFontSize(18);
-  doc.text(ctx.dev.doctor_name, margin, 13);
+  doc.text(CLINIC.name, page_w/2, 12, { align: 'center' });
+
   doc.setFont('helvetica','normal'); doc.setFontSize(10);
-  const line2 = [ctx.dev.doctor_qualification, ctx.dev.doctor_reg_no].filter(Boolean).join(' · ');
-  doc.text(line2, margin, 19);
-  if (ctx.dev.doctor_clinic) doc.text(ctx.dev.doctor_clinic, margin, 24);
+  doc.text(`${CLINIC.doctor} · ${CLINIC.regNo}`, page_w/2, 19, { align: 'center' });
+  doc.setFontSize(9);
+  doc.text(`${CLINIC.pcpndt}`, page_w/2, 24, { align: 'center' });
+  doc.text(`${CLINIC.address} · Ph: ${CLINIC.phone} · ${CLINIC.email}`, page_w/2, 29, { align: 'center' });
 
-  if (ctx.dev.doctor_phone) {
-    doc.setFontSize(10);
-    doc.text('Ph: ' + ctx.dev.doctor_phone, page_w - margin, 19, { align: 'right' });
-  }
-
-  let y = 40;
+  // ───────────────────────────────────────────
+  // TITLE BAR
+  // ───────────────────────────────────────────
+  let y = 44;
   doc.setDrawColor(...TEAL); doc.setLineWidth(0.6);
   doc.line(margin, y, page_w - margin, y);
   y += 7;
@@ -345,22 +376,27 @@ function buildPdf(ctx) {
   y += 3;
   doc.line(margin, y, page_w - margin, y);
 
+  // Ref / Date
   y += 8;
   doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(...GREY);
   doc.text('Ref No: ' + ctx.refNo, margin, y);
   doc.text('Date: ' + ctx.dateStr, page_w - margin, y, { align: 'right' });
 
+  // ───────────────────────────────────────────
+  // REFERRED TO (short — clinic is header so brief)
+  // ───────────────────────────────────────────
   y += 10;
-  doc.setFillColor(232, 244, 240);
-  doc.roundedRect(margin, y, page_w - 2*margin, 22, 2, 2, 'F');
-  doc.setTextColor(...TEAL); doc.setFont('helvetica','bold'); doc.setFontSize(11);
-  doc.text('REFER TO:', margin + 4, y + 6);
-  doc.setTextColor(...DARK); doc.setFont('helvetica','bold'); doc.setFontSize(13);
-  doc.text(CLINIC.doctor, margin + 4, y + 12);
-  doc.setFont('helvetica','normal'); doc.setFontSize(10);
-  doc.text(`${CLINIC.name}, ${CLINIC.address} · Ph: ${CLINIC.phone}`, margin + 4, y + 18);
-  y += 30;
+  doc.setFillColor(...TEAL_LIGHT);
+  doc.roundedRect(margin, y, page_w - 2*margin, 14, 2, 2, 'F');
+  doc.setTextColor(...TEAL); doc.setFont('helvetica','bold'); doc.setFontSize(10);
+  doc.text('REFERRED TO:', margin + 4, y + 5.5);
+  doc.setTextColor(...DARK); doc.setFont('helvetica','bold'); doc.setFontSize(12);
+  doc.text(`${CLINIC.doctor} — Consultant Radiologist`, margin + 4, y + 11);
+  y += 22;
 
+  // ───────────────────────────────────────────
+  // PATIENT DETAILS
+  // ───────────────────────────────────────────
   doc.setTextColor(...TEAL); doc.setFont('helvetica','bold'); doc.setFontSize(11);
   doc.text('PATIENT DETAILS', margin, y);
   y += 2; doc.setDrawColor(...TEAL); doc.line(margin, y, page_w - margin, y);
@@ -375,6 +411,9 @@ function buildPdf(ctx) {
   doc.setFont('helvetica','normal'); doc.text('+91 ' + ctx.patientPhone, margin + 24, y);
   y += 12;
 
+  // ───────────────────────────────────────────
+  // SCAN REQUESTED
+  // ───────────────────────────────────────────
   doc.setTextColor(...TEAL); doc.setFont('helvetica','bold'); doc.setFontSize(11);
   doc.text('SCAN REQUESTED', margin, y);
   y += 2; doc.line(margin, y, page_w - margin, y);
@@ -383,6 +422,9 @@ function buildPdf(ctx) {
   doc.text('• ' + ctx.scan.label, margin, y);
   y += 10;
 
+  // ───────────────────────────────────────────
+  // CLINICAL HISTORY
+  // ───────────────────────────────────────────
   doc.setTextColor(...TEAL); doc.setFont('helvetica','bold'); doc.setFontSize(11);
   doc.text('CLINICAL HISTORY / INDICATION', margin, y);
   y += 2; doc.line(margin, y, page_w - margin, y);
@@ -394,28 +436,71 @@ function buildPdf(ctx) {
   doc.text(wrapped, margin, y);
   y += wrapped.length * 5 + 5;
 
-  if (y > 230) { doc.addPage(); y = 20; }
+  // ───────────────────────────────────────────
+  // PATIENT PREPARATION (highlight box)
+  // ───────────────────────────────────────────
+  if (y > 220) { doc.addPage(); y = 20; }
+  const prepWrapped = doc.splitTextToSize(ctx.scan.prep, page_w - 2*margin - 8);
+  const prepBoxH = 10 + prepWrapped.length * 5;
   doc.setFillColor(254, 252, 232);
-  doc.roundedRect(margin, y, page_w - 2*margin, 18, 2, 2, 'F');
+  doc.roundedRect(margin, y, page_w - 2*margin, prepBoxH, 2, 2, 'F');
   doc.setTextColor(180, 100, 10); doc.setFont('helvetica','bold'); doc.setFontSize(10);
   doc.text('PATIENT PREPARATION:', margin + 4, y + 6);
   doc.setTextColor(...DARK); doc.setFont('helvetica','normal'); doc.setFontSize(10);
-  const prepWrapped = doc.splitTextToSize(ctx.scan.prep, page_w - 2*margin - 8);
   doc.text(prepWrapped, margin + 4, y + 12);
-  y += 25;
+  y += prepBoxH + 8;
 
-  if (y < 240) y = 240;
-  doc.setDrawColor(180, 180, 180); doc.setLineWidth(0.3);
-  doc.line(page_w - margin - 60, y, page_w - margin, y);
+  // ───────────────────────────────────────────
+  // REFERRAL BY (bottom — referring doctor credit)
+  // ───────────────────────────────────────────
+  if (y < 235) y = 235;
+
+  // Horizontal separator
+  doc.setDrawColor(...TEAL); doc.setLineWidth(0.3);
+  doc.line(margin, y, page_w - margin, y);
+  y += 6;
+
+  doc.setTextColor(...TEAL); doc.setFont('helvetica','bold'); doc.setFontSize(10);
+  doc.text('REFERRAL BY:', margin, y);
+  y += 6;
+
+  const refName = /^dr\.?\s/i.test(ctx.dev.doctor_name) ? ctx.dev.doctor_name : ('Dr. ' + ctx.dev.doctor_name);
+  doc.setTextColor(...DARK); doc.setFont('helvetica','bold'); doc.setFontSize(12);
+  doc.text(refName, margin, y);
+  y += 5;
+
   doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(...GREY);
-  doc.text('Referring Doctor Signature', page_w - margin - 30, y + 5, { align: 'center' });
-  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...DARK);
-  doc.text(ctx.dev.doctor_name, page_w - margin - 30, y + 11, { align: 'center' });
-  if (ctx.dev.doctor_reg_no) {
-    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...GREY);
-    doc.text(ctx.dev.doctor_reg_no, page_w - margin - 30, y + 15, { align: 'center' });
-  }
+  const credLine = [ctx.dev.doctor_qualification, ctx.dev.doctor_reg_no].filter(Boolean).join(' · ');
+  if (credLine) { doc.text(credLine, margin, y); y += 4; }
+  if (ctx.dev.doctor_clinic) { doc.text(ctx.dev.doctor_clinic, margin, y); y += 4; }
+  if (ctx.dev.doctor_phone) { doc.text('Ph: ' + ctx.dev.doctor_phone, margin, y); y += 4; }
 
+  // ───────────────────────────────────────────
+  // DIGITAL AUTHENTICATION STAMP (right side, same block)
+  // ───────────────────────────────────────────
+  const stampY = Math.max(y - 14, 248);
+  const stampX = page_w - margin - 72;
+  const stampW = 72;
+  const stampH = 22;
+
+  doc.setDrawColor(...TEAL);
+  doc.setLineWidth(0.4);
+  doc.roundedRect(stampX, stampY, stampW, stampH, 2, 2, 'S');
+
+  doc.setTextColor(...TEAL); doc.setFont('helvetica','bold'); doc.setFontSize(8);
+  doc.text('DIGITALLY AUTHENTICATED', stampX + stampW/2, stampY + 4, { align: 'center' });
+
+  doc.setTextColor(...DARK); doc.setFont('helvetica','normal'); doc.setFontSize(7);
+  doc.text('Computer-generated — no physical signature required', stampX + stampW/2, stampY + 8, { align: 'center' });
+  const devPhoneShort = ctx.dev.doctor_phone ? ('+91 ' + ctx.dev.doctor_phone) : 'device-bound';
+  doc.text(`Issued from: ${devPhoneShort}`, stampX + stampW/2, stampY + 12, { align: 'center' });
+  doc.text(`Telegram-OTP verified · ${ctx.dateStr}`, stampX + stampW/2, stampY + 16, { align: 'center' });
+  doc.setFont('helvetica','bold'); doc.setFontSize(7);
+  doc.text(`Ref: ${ctx.refNo}`, stampX + stampW/2, stampY + 20, { align: 'center' });
+
+  // ───────────────────────────────────────────
+  // FOOTER
+  // ───────────────────────────────────────────
   doc.setDrawColor(...TEAL); doc.setLineWidth(0.4);
   doc.line(margin, 282, page_w - margin, 282);
   doc.setFontSize(8); doc.setTextColor(...GREY); doc.setFont('helvetica','normal');
