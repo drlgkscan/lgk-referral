@@ -202,6 +202,62 @@ document.getElementById('btn-reset-form').addEventListener('click', () => {
 });
 
 // ============================================================
+// Self-Registration flow (NEW)
+// ============================================================
+document.getElementById('btn-show-register').addEventListener('click', () => {
+  show('register-screen');
+});
+document.getElementById('btn-back-to-login').addEventListener('click', () => {
+  show('setup-screen');
+});
+document.getElementById('btn-back-after-code').addEventListener('click', () => {
+  show('setup-screen');
+});
+
+document.getElementById('btn-submit-registration').addEventListener('click', async () => {
+  const name = document.getElementById('reg-name').value.trim();
+  const qualification = document.getElementById('reg-qualification').value.trim();
+  const reg_no = document.getElementById('reg-reg-no').value.trim();
+  const speciality = document.getElementById('reg-speciality').value.trim();
+  const clinic = document.getElementById('reg-clinic').value.trim();
+  const address = document.getElementById('reg-address').value.trim();
+  const phone = cleanPhone(document.getElementById('reg-phone').value);
+
+  if (!name) { toast('Enter your name', 'error'); return; }
+  if (!qualification) { toast('Enter qualification', 'error'); return; }
+  if (!validPhone(phone)) { toast('Enter a valid 10-digit phone', 'error'); return; }
+
+  loading(true, 'Submitting registration…');
+  try {
+    const data = await api('submit_enrollment', {
+      name, qualification, reg_no, speciality, clinic, address, phone
+    });
+    document.getElementById('code-display').textContent = data.code;
+    if (data.duplicate) {
+      toast('You already have a pending request — using existing code', 'success');
+    } else {
+      toast('Registration submitted!', 'success');
+    }
+    show('code-screen');
+  } catch (e) {
+    toast(e.message, 'error');
+  } finally { loading(false); }
+});
+
+document.getElementById('btn-copy-code').addEventListener('click', () => {
+  const code = document.getElementById('code-display').textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(code).then(() => toast('Code copied! Now open Telegram', 'success'));
+  } else {
+    toast('Code: ' + code, 'success');
+  }
+});
+
+document.getElementById('btn-open-telegram').addEventListener('click', () => {
+  window.open('https://t.me/LGKScanReferralBot', '_blank');
+});
+
+// ============================================================
 // Referral generation
 // ============================================================
 let lastPdfDataUrl = null;
