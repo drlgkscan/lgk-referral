@@ -67,7 +67,7 @@ label {
 input, select, textarea {
   width: 100%;
   padding: 13px 14px;
-  font-size: 16px; /* 16px prevents iOS zoom */
+  font-size: 16px;
   border: 1.5px solid var(--border);
   border-radius: 8px;
   background: white;
@@ -97,19 +97,42 @@ button {
 }
 button:active { transform: scale(0.98); }
 
-.btn-primary {
-  background: var(--teal);
-  color: white;
-}
+.btn-primary { background: var(--teal); color: white; }
 .btn-primary:hover { background: var(--teal-dark); }
 .btn-primary:disabled { background: #9CA3AF; cursor: not-allowed; }
 
-.btn-ghost {
-  background: transparent;
-  color: var(--muted);
-  border: 1.5px solid var(--border);
-}
+.btn-ghost { background: transparent; color: var(--muted); border: 1.5px solid var(--border); }
 .btn-ghost:hover { background: #F9FAFB; color: var(--text); }
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 22px 0 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.divider span { padding: 0 12px; }
+
+.code-display {
+  font-family: 'Courier New', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  background: var(--teal-light);
+  color: var(--teal-dark);
+  padding: 18px;
+  border-radius: 10px;
+  margin: 16px 0;
+  letter-spacing: 4px;
+  border: 2px dashed var(--teal);
+  user-select: all;
+}
 
 .doctor-strip {
   display: flex;
@@ -135,6 +158,7 @@ button:active { transform: scale(0.98); }
   justify-content: center;
   margin: 0 auto 16px;
 }
+.success-card .muted { text-align: left; }
 
 .overlay {
   position: fixed;
@@ -184,7 +208,6 @@ button:active { transform: scale(0.98); }
   font-size: 12px;
 }
 
-/* Larger screens — still cap at tablet width */
 @media (min-width: 600px) {
   .card { padding: 28px; }
 }
