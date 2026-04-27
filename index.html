@@ -13,26 +13,23 @@
 </head>
 <body>
 
-<!-- Header -->
 <header id="app-header">
   <div class="header-title">LGK Scan Referral</div>
   <div class="header-sub" id="header-sub">Secure doctor referral system</div>
 </header>
 
-<!-- Loading overlay -->
 <div id="loading" class="overlay hidden">
   <div class="spinner"></div>
   <div id="loading-msg">Please wait…</div>
 </div>
 
-<!-- Toast -->
 <div id="toast" class="toast hidden"></div>
 
-<!-- SCREEN 1: Setup / OTP -->
+<!-- SCREEN 1: Setup / OTP login -->
 <section id="setup-screen" class="screen hidden">
   <div class="card">
-    <h2>Doctor Setup</h2>
-    <p class="muted">Enter your Telegram-registered phone number to receive a one-time code.</p>
+    <h2>Doctor Login</h2>
+    <p class="muted">Enter your registered phone number to receive a one-time code via Telegram.</p>
 
     <label for="setup-phone">Your Phone Number</label>
     <input type="tel" id="setup-phone" inputmode="tel" placeholder="10-digit number" maxlength="10" autocomplete="tel-national" />
@@ -45,10 +42,70 @@
       <button id="btn-verify-otp" class="btn-primary">Verify &amp; Bind This Device</button>
       <p class="muted small">OTP valid for 5 minutes. Check your Telegram.</p>
     </div>
+
+    <div class="divider"><span>or</span></div>
+
+    <button id="btn-show-register" class="btn-ghost">New Doctor? Register here</button>
   </div>
 </section>
 
-<!-- SCREEN 2: Main referral form -->
+<!-- SCREEN 1B: Register (self-enrollment) -->
+<section id="register-screen" class="screen hidden">
+  <div class="card">
+    <h2>Doctor Registration</h2>
+    <p class="muted">Fill these details. After submission, you will get a verification code to send to our Telegram bot.</p>
+
+    <label for="reg-name">Full Name *</label>
+    <input type="text" id="reg-name" placeholder="Dr. Your Name" autocomplete="name" />
+
+    <label for="reg-qualification">Qualification *</label>
+    <input type="text" id="reg-qualification" placeholder="MBBS, MD / BAMS / BHMS / etc." />
+
+    <label for="reg-reg-no">Registration No.</label>
+    <input type="text" id="reg-reg-no" placeholder="KMC Reg. / AYUSH Reg. (optional)" />
+
+    <label for="reg-speciality">Speciality</label>
+    <input type="text" id="reg-speciality" placeholder="General Physician / Surgeon / OBG / etc." />
+
+    <label for="reg-clinic">Clinic / Hospital</label>
+    <input type="text" id="reg-clinic" placeholder="(if applicable)" />
+
+    <label for="reg-address">Address</label>
+    <input type="text" id="reg-address" placeholder="Sirsi / Banavasi / etc." />
+
+    <label for="reg-phone">Phone Number *</label>
+    <input type="tel" id="reg-phone" inputmode="tel" placeholder="10-digit number" maxlength="10" />
+
+    <button id="btn-submit-registration" class="btn-primary">Submit Registration</button>
+    <button id="btn-back-to-login" class="btn-ghost">Back to Login</button>
+  </div>
+</section>
+
+<!-- SCREEN 1C: Show enrollment code -->
+<section id="code-screen" class="screen hidden">
+  <div class="card success-card">
+    <div class="success-icon">📋</div>
+    <h2>Almost Done!</h2>
+    <p class="muted">Send this verification code to our Telegram bot:</p>
+
+    <div class="code-display" id="code-display">LGK-XXXX</div>
+
+    <p class="muted">
+      <strong>Steps:</strong><br>
+      1. Open Telegram on this phone<br>
+      2. Search for: <strong>@LGKScanReferralBot</strong><br>
+      3. Tap Start, then send the code above<br>
+      4. Wait for Dr. Satish's approval<br>
+      5. You will receive an approval message in Telegram
+    </p>
+
+    <button id="btn-copy-code" class="btn-primary">Copy Code</button>
+    <button id="btn-open-telegram" class="btn-ghost">Open Telegram</button>
+    <button id="btn-back-after-code" class="btn-ghost">Back to Login</button>
+  </div>
+</section>
+
+<!-- SCREEN 2: Main referral form (unchanged) -->
 <section id="main-screen" class="screen hidden">
   <div class="card">
     <div class="doctor-strip">
@@ -130,7 +187,6 @@
   <small>Dr. L.G. Krishna Ultrasound Clinic, Sirsi · 7204764969</small>
 </footer>
 
-<!-- Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="app.js"></script>
 <script>
